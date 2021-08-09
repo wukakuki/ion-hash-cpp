@@ -15,11 +15,11 @@ std::string Ion::printBytes(std::vector<unsigned char> bytes) {
     std::stringstream ss;
     ss << std::hex;
 
-    for (unsigned char i : bytes) {
+    for (int i = 0; i < bytes.size(); i ++) {
         if (i != 0) {
             ss << ' ';
         }
-        ss << std::setw(2) << std::setfill('0') << (int) i;
+        ss << std::setw(2) << std::setfill('0') << (0xff & (unsigned char)bytes[i]);
     }
 
     return ss.str();
