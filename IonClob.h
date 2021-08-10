@@ -20,6 +20,8 @@ namespace Ion {
         explicit Clob(Ion::Reader &reader);
 
         void getBytes() override;
+
+        explicit Clob(std::string value);
     };
 };
 

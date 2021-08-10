@@ -21,6 +21,8 @@ namespace Ion {
         explicit Blob(Ion::Reader &reader);
 
         void getBytes() override;
+
+        explicit Blob(std::vector<unsigned char> value);
     };
 };
 

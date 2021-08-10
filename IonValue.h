@@ -32,6 +32,8 @@ namespace Ion {
 
         ~Value();
 
+        Value(const Value&) = default;
+
         explicit Value(Ion::Reader &reader);
 
         static Ion::Value *readAll(Ion::Reader &reader);

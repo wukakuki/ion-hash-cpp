@@ -22,6 +22,8 @@ namespace Ion {
         explicit Bool(Ion::Reader &reader);
 
         void getBytes() override;
+
+        explicit Bool(bool value);
     };
 };
 

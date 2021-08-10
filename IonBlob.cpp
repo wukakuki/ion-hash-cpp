@@ -50,3 +50,9 @@ void Ion::Blob::getBytes() {
         this->bytes = writer.getBytes();
     }
 }
+
+Ion::Blob::Blob(std::vector<unsigned char> value) : value(value) {
+    this->value.clear();
+    this->value.reserve(value.size());
+    std::copy( value.begin(), value.end(), std::back_inserter(this->value));
+}

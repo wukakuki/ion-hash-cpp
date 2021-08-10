@@ -32,3 +32,7 @@ void Ion::Bool::getBytes() {
         bytes = writer.getBytes();
     }
 }
+
+Ion::Bool::Bool(bool value) {
+    this->value = value;
+}

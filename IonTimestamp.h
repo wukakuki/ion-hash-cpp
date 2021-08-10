@@ -42,6 +42,8 @@ namespace Ion {
 
         Timestamp(int year, int month, int day, int hours, int minutes, int seconds, decQuad *p_fraction);
 
+        Timestamp(int year, int month, int day, int hours, int minutes, int seconds, uint64_t coefficient, int32_t Exponent);
+
         int getPrecision();
 
         char *toString();

@@ -50,3 +50,8 @@ void Ion::Clob::getBytes() {
         this->bytes = writer.getBytes();
     }
 }
+
+Ion::Clob::Clob(std::string value) {
+    this->value.clear();
+    std::copy( value.begin(), value.end(), std::back_inserter(this->value));
+}

@@ -99,6 +99,29 @@ Ion::Timestamp::Timestamp(int year, int month, int day, int hours, int minutes, 
     type = Ion::Types::TIMESTAMP;
 }
 
+Ion::Timestamp::Timestamp(int year, int month, int day, int hours, int minutes, int seconds, uint64_t coefficient,
+                          int32_t Exponent) {
+    std::vector<uint8_t> ret;
+    if (coefficient==0) ret.push_back(0);
+    // skip the above line if you don't mind an empty vector for "0"
+    while(coefficient>0) {
+        uint d=coefficient/10;
+        ret.push_back(coefficient-(d*10)); // may be faster than x%10
+        coefficient=d;
+    }
+    std::reverse(ret.begin(),ret.end());
+
+    decQuad fraction;
+
+    decQuadFromBCD(&fraction, Exponent, ret.data(), 0);
+
+    iERR err = ion_timestamp_for_fraction(&this->timestamp, year, month, day, hours, minutes, seconds, &fraction, &Ion::g_IonDecimalContext);
+
+    ION_OK(err)
+
+    type = Ion::Types::TIMESTAMP;
+}
+
 int Ion::Timestamp::getPrecision() {
     int precision;
     iERR err = ion_timestamp_get_precision(&this->timestamp, &precision);
