@@ -35,6 +35,8 @@ namespace Ion {
 
         Int(BYTE *buf, SIZE limit, bool isAbs, bool isNegative);
 
+        Int(const Int &other);
+
         explicit Int(int64_t value);
 
         bool _isNull() const;

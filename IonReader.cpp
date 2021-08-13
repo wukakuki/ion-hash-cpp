@@ -12,7 +12,7 @@
 #include <iomanip>
 
 #ifndef ION_OK
-#define ION_OK(x) if (x) { printf("In %s, line %d, %s Error: %s\n", __FILE__, __LINE__, __func__, ion_error_to_str(x)); }
+#define ION_OK(x) if (x) { printf("In %s, line %d, %s Error: %s\n", __FUNCTION__, __LINE__, __func__, ion_error_to_str(x)); }
 #endif
 
 Ion::Reader::Reader(const char *ion_text) {
@@ -28,13 +28,7 @@ Ion::Reader::Reader(const char *ion_text) {
 }
 
 Ion::Reader::Reader(const std::vector<unsigned char> &ion_binary) {
-    ION_READER_OPTIONS options;
-    memset(&options, 0, sizeof(ION_READER_OPTIONS));
-    options.decimal_context = &Ion::g_IonDecimalContext;
-    options.max_container_depth = ION_CONTAINER_DEPTH_MAX;
-    options.max_annotation_count = ION_ANNOTATION_MAX;
-
-    iERR err = ion_reader_open_buffer(&reader, (BYTE *) ion_binary.data(), (SIZE) ion_binary.size(), &options);
+    iERR err = ion_reader_open_buffer(&reader, (BYTE *) ion_binary.data(), (SIZE) ion_binary.size(), nullptr);
 
     ION_OK(err)
 }

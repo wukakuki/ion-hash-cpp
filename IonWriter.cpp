@@ -10,7 +10,7 @@
 #include <cstdlib>
 
 #ifndef ION_OK
-#define ION_OK(x) if (x) { printf("In %s, line %d, %s Error: %s\n", __FILE__, __LINE__, __func__, ion_error_to_str(x)); }
+#define ION_OK(x) if (x) { printf("In %s, line %d, %s Error: %s\n", __FUNCTION__, __LINE__, __func__, ion_error_to_str(x)); }
 #endif
 
 Ion::Writer::Writer(bool isBinary) {
@@ -128,7 +128,7 @@ void Ion::Writer::writeTimestamp(Ion::Timestamp &value) {
 }
 
 void Ion::Writer::writeClob(Ion::Clob &value) {
-    iERR err = ion_writer_write_clob(writer, (BYTE *)value.value.data(), (SIZE)value.value.size());
+    iERR err = ion_writer_write_clob(writer, (BYTE *)value.value.c_str(), (SIZE)value.value.size());
 
     ION_OK(err)
 }

@@ -11,7 +11,7 @@
 #include <algorithm>
 
 #ifndef ION_OK
-#define ION_OK(x) if (x) { printf("In %s, line %d, %s Error: %s\n", __FILE__, __LINE__, __func__, ion_error_to_str(x)); }
+#define ION_OK(x) if (x) { printf("In %s, line %d, %s Error: %s\n", __FUNCTION__, __LINE__, __func__, ion_error_to_str(x)); }
 #endif
 
 Ion::Clob::Clob(Ion::Reader &reader) : Ion::ScalarValue(reader) {
@@ -31,7 +31,7 @@ Ion::Clob::Clob(Ion::Reader &reader) : Ion::ScalarValue(reader) {
         ION_OK(IERR_EOF);
     }
 
-    value = std::vector<unsigned char>(bytes, bytes + length + 1);
+    value = (char *)bytes;
 
     if (bytes) {
         free(bytes);
@@ -52,6 +52,5 @@ void Ion::Clob::getBytes() {
 }
 
 Ion::Clob::Clob(std::string value) {
-    this->value.clear();
-    std::copy( value.begin(), value.end(), std::back_inserter(this->value));
+    this->value = value;
 }

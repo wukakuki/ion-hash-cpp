@@ -15,7 +15,7 @@
 namespace Ion {
     class ION_HASH_EXPORTS Clob : public Ion::ScalarValue {
     public:
-        std::vector<unsigned char> value;
+        std::string value;
     public:
         explicit Clob(Ion::Reader &reader);
 

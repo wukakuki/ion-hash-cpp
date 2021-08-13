@@ -24,7 +24,7 @@
 #include <algorithm>
 
 #ifndef ION_OK
-#define ION_OK(x) if (x) { printf("In %s, line %d, %s Error: %s\n", __FILE__, __LINE__, __func__, ion_error_to_str(x)); }
+#define ION_OK(x) if (x) { printf("In %s, line %d, %s Error: %s\n", __FUNCTION__, __LINE__, __func__, ion_error_to_str(x)); }
 #endif
 
 Ion::Value::Value() : Ion::Hash::Serialize(), type(Ion::Type(tid_none)) {

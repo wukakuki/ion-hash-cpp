@@ -10,7 +10,7 @@
 #include <cstdlib>
 
 #ifndef ION_OK
-#define ION_OK(x) if (x) { printf("In %s, line %d, %s Error: %s\n", __FILE__, __LINE__, __func__, ion_error_to_str(x)); }
+#define ION_OK(x) if (x) { printf("In %s, line %d, %s Error: %s\n", __FUNCTION__, __LINE__, __func__, ion_error_to_str(x)); }
 #endif
 
 Ion::Int::Int() {
@@ -25,9 +25,14 @@ Ion::Int::~Int() {
     ion_int_free(value);
 }
 
-Ion::Int::Int(ION_INT *value) : value(value) {
+Ion::Int::Int(ION_INT *value) {
+    iERR err;
+    err = ion_int_copy(this->value, value, nullptr);
+
+    ION_OK(err)
+
     int32_t signum;
-    iERR err = ion_int_signum(value, &signum);
+    err = ion_int_signum(value, &signum);
 
     ION_OK(err)
 
@@ -73,12 +78,23 @@ void Ion::Int::getBytes() {
 
 Ion::Int::Int(const Ion::String &str, const bool isHex, const bool isBinary) {
     iERR err;
+
+    err = ion_int_alloc(nullptr, &value);
+
+    ION_OK(err)
+
     if (isHex) {
-        err = ion_int_from_hex_string(value, (const iSTRING)&str.value);
+        ION_STRING strValue = str.value;
+
+        err = ion_int_from_hex_string(value, &strValue);
     } else if (isBinary) {
-        err = ion_int_from_binary_string(value, (const iSTRING)&str.value);
+        ION_STRING strValue = str.value;
+
+        err = ion_int_from_binary_string(value, &strValue);
     } else {
-        err = ion_int_from_string(value, (const iSTRING)&str.value);
+        ION_STRING strValue = str.value;
+
+        err = ion_int_from_string(value, &strValue);
     }
 
     ION_OK(err)
@@ -97,6 +113,11 @@ Ion::Int::Int(const Ion::String &str, const bool isHex, const bool isBinary) {
 
 Ion::Int::Int(const char *p_chars, SIZE char_limit, const bool isHex, const bool isBinary) {
     iERR err;
+
+    err = ion_int_alloc(nullptr, &value);
+
+    ION_OK(err)
+
     if (isHex) {
         err = ion_int_from_hex_chars(value, p_chars, char_limit);
     } else if (isBinary) {
@@ -121,6 +142,11 @@ Ion::Int::Int(const char *p_chars, SIZE char_limit, const bool isHex, const bool
 
 Ion::Int::Int(BYTE *buf, SIZE limit, const bool isAbs, bool isNegative) {
     iERR err;
+
+    err = ion_int_alloc(nullptr, &value);
+
+    ION_OK(err)
+
     if (isAbs) {
         err = ion_int_from_abs_bytes(value, buf, limit, isNegative);
     } else {
@@ -141,8 +167,20 @@ Ion::Int::Int(BYTE *buf, SIZE limit, const bool isAbs, bool isNegative) {
     }
 }
 
+Ion::Int::Int(const Ion::Int &other) {
+    iERR err = ion_int_copy(value, other.value, nullptr);
+
+    ION_OK(err)
+}
+
 Ion::Int::Int(int64_t value) {
-    iERR err = ion_int_from_long(this->value, value);
+    iERR err;
+
+    err = ion_int_alloc(nullptr, &this->value);
+
+    ION_OK(err)
+
+    err = ion_int_from_long(this->value, value);
 
     ION_OK(err)
 
