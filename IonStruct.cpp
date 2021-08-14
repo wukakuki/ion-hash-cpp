@@ -56,3 +56,7 @@ std::vector<unsigned char> Ion::Struct::getRepresentation() {
 
     return representation;
 }
+
+Ion::Struct::Struct() {
+    type = Ion::Types::STRUCT;
+}

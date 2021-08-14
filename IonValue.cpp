@@ -144,6 +144,87 @@ Ion::Value *Ion::Value::readAll(Ion::Reader &reader) {
     }
 }
 
+std::vector<unsigned char> Ion::Value::writeAll(Ion::Value *ionValue, bool isBinary) {
+    Ion::Writer writer(isBinary);
+
+    if (ionValue) {
+        ionValue->writeAllInterval(writer);
+    }
+
+    return writer.getBytes();
+}
+
+void Ion::Value::writeAllInterval(Ion::Writer &writer) {
+    if (this->fieldName && !this->fieldName->isNull) {
+        writer.writeFieldName(*this->fieldName);
+    }
+
+    for (auto elem : this->annotations) {
+        writer.addAnnotation(elem);
+    }
+
+    if (this->isNull) {
+        writer.writeNull(this->type);
+    } else {
+        switch (this->type.binaryTypeId) {
+            case type_null: {
+                writer.writeNull(this->type);
+                break;
+            }
+            case type_bool: {
+                writer.writeBoolean(*(Ion::Bool *)this);
+                break;
+            }
+            case type_pos_int:
+            case type_neg_int: {
+                writer.writeInt(*(Ion::Int *)this);
+                break;
+            }
+            case type_float: {
+                writer.writeFloat(*(Ion::Float *)this);
+                break;
+            }
+            case type_decimal: {
+                writer.writeDecimal(*(Ion::Decimal *)this);
+                break;
+            }
+            case type_timestamp: {
+                writer.writeTimestamp(*(Ion::Timestamp *)this);
+                break;
+            }
+            case type_symbol: {
+                writer.writeSymbol(*(Ion::String *)this);
+                break;
+            }
+            case type_string: {
+                writer.writeString(*(Ion::String *)this);
+                break;
+            }
+            case type_clob: {
+                writer.writeClob(*(Ion::Clob *)this);
+                break;
+            }
+            case type_blob: {
+                writer.writeBlob(*(Ion::Blob *)this);
+                break;
+            }
+            case type_list:
+            case type_sexp:
+            case type_struct: {
+                writer.stepIn(this->type);
+                for (auto elem : this->children) {
+                    elem->writeAllInterval(writer);
+                }
+                writer.stepOut();
+                break;
+            }
+            default:
+                writer.writeNull(this->type);
+                break;
+        }
+    }
+}
+
 void Ion::Value::handleFieldName() {
     if (fieldName) {
         this->addBeginMarker();

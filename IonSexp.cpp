@@ -43,3 +43,7 @@ std::vector<unsigned char> Ion::Sexp::getRepresentation() {
     }
     return representation;
 }
+
+Ion::Sexp::Sexp() {
+    type = Ion::Types::SEXP;
+}

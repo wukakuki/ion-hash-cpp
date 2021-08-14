@@ -16,6 +16,7 @@
 
 namespace Ion {
     class ION_HASH_EXPORTS String;
+    class ION_HASH_EXPORTS Writer;
 
     class ION_HASH_EXPORTS Value : public Ion::Hash::Serialize {
     public:
@@ -37,6 +38,8 @@ namespace Ion {
         explicit Value(Ion::Reader &reader);
 
         static Ion::Value *readAll(Ion::Reader &reader);
+        static std::vector<unsigned char> writeAll(Ion::Value *ionValue, bool isBinary);
+        void writeAllInterval(Ion::Writer &writer);
 
         void handleFieldName() override;
 

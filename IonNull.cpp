@@ -30,3 +30,8 @@ void Ion::Null::getBytes() {
     }
 
 }
+
+Ion::Null::Null() {
+    type = Ion::Types::_NULL;
+    isNull = true;
+}

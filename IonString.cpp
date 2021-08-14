@@ -40,13 +40,19 @@ void Ion::String::getBytes() {
 }
 
 Ion::String::String(std::string &str) {
-    ion_string_assign_cstr(&value, (char *)str.c_str(), str.length());
+    BYTE *bytes = (BYTE *) malloc(str.length());
+    memcpy(bytes, str.c_str(), str.length());
+
+    ion_string_assign_cstr(&value, (char *)bytes, str.length());
 
     type = Ion::Types::STRING;
 }
 
 Ion::String::String(char *str, SIZE len) {
-    ion_string_assign_cstr(&value, str, len);
+    BYTE *bytes = (BYTE *) malloc(len);
+    memcpy(bytes, str, len);
+
+    ion_string_assign_cstr(&value, (char *)bytes, len);
 
     type = Ion::Types::STRING;
 }

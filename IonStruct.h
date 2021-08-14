@@ -22,6 +22,8 @@ namespace Ion {
         void addTQ() override;
 
         std::vector<unsigned char> getRepresentation() override;
+
+        Struct();
     };
 };
 

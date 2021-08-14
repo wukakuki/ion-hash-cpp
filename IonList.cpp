@@ -43,3 +43,7 @@ std::vector<unsigned char> Ion::List::getRepresentation() {
     }
     return representation;
 }
+
+Ion::List::List() {
+    type = Ion::Types::LIST;
+}

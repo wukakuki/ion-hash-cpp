@@ -18,6 +18,8 @@ namespace Ion {
         explicit Null(Ion::Reader &reader);
 
         void getBytes() override;
+
+        Null();
     };
 };
 
